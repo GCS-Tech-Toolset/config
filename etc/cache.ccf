@@ -1,0 +1,54 @@
+# DEFAULT CACHE REGION
+jcs.default=DC
+jcs.default.cacheattributes=org.apache.commons.jcs.engine.CompositeCacheAttributes
+jcs.default.cacheattributes.MaxObjects=25000
+jcs.default.cacheattributes.MemoryCacheName=org.apache.commons.jcs.engine.memory.lru.LRUMemoryCache
+jcs.default.cacheattributes.UseMemoryShrinker=true
+jcs.default.cacheattributes.MaxMemoryIdleTimeSeconds=600
+jcs.default.cacheattributes.ShrinkerIntervalSeconds=20
+jcs.default.elementattributes=org.apache.commons.jcs.engine.ElementAttributes
+jcs.default.elementattributes.IsEternal=false
+jcs.default.elementattributes.MaxLife=2000
+jcs.default.elementattributes.IdleTime=1800
+jcs.default.elementattributes.IsSpool=true
+jcs.default.elementattributes.IsRemote=true
+jcs.default.elementattributes.IsLateral=true
+jcs.default.elementattributes.cacheeventlogger=org.apache.commons.jcs.engine.logging.CacheEventLoggerDebugLogger
+jcs.default.elementattributes.cacheeventlogger.attributes.logCategoryName=test.RCCEventLogCategory
+
+
+# PRE-DEFINED CACHE REGIONS
+jcs.region.testCache1=DC
+jcs.region.testCache1.cacheattributes=org.apache.commons.jcs.engine.CompositeCacheAttributes
+jcs.region.testCache1.cacheattributes.MaxObjects=10000
+jcs.region.testCache1.cacheattributes.MemoryCacheName=org.apache.commons.jcs.engine.memory.lru.LRUMemoryCache
+jcs.region.testCache1.cacheattributes.UseMemoryShrinker=true
+jcs.region.testCache1.cacheattributes.MaxMemoryIdleTimeSeconds=300
+jcs.region.testCache1.cacheattributes.ShrinkerIntervalSeconds=20
+jcs.region.testCache1.cacheattributes.MaxSpoolPerRun=500
+jcs.region.testCache1.elementattributes=org.apache.commons.jcs.engine.ElementAttributes
+jcs.region.testCache1.elementattributes.IsEternal=false
+
+
+# AVAILABLE AUXILIARY CACHES
+jcs.auxiliary.DC=org.apache.commons.jcs.auxiliary.disk.indexed.IndexedDiskCacheFactory
+jcs.auxiliary.DC.attributes=org.apache.commons.jcs.auxiliary.disk.indexed.IndexedDiskCacheAttributes
+jcs.auxiliary.DC.attributes.DiskPath=${user.dir}/var/jcs_swap
+jcs.auxiliary.DC.attributes.MaxPurgatorySize=10000000
+jcs.auxiliary.DC.attributes.MaxKeySize=500000
+jcs.auxiliary.DC.attributes.OptimizeAtRemoveCount=25000
+jcs.auxiliary.DC.attributes.ShutdownSpoolTimeLimit=60
+jcs.auxiliary.DC.cacheeventlogger=org.apache.commons.jcs.engine.logging.CacheEventLoggerDebugLogger
+jcs.auxiliary.DC.cacheeventlogger.attributes.logCategoryName=test.RCCEventLogCategory
+
+
+# DISCOVERY MODE FOR REMOTE CACHES
+#jcs.auxiliary.LTCP=org.apache.commons.jcs.auxiliary.lateral.socket.tcp.LateralTCPCacheFactory
+#jcs.auxiliary.LTCP.attributes=org.apache.commons.jcs.auxiliary.lateral.socket.tcp.TCPLateralCacheAttributes
+#jcs.auxiliary.LTCP.attributes.TcpListenerPort=1110
+#jcs.auxiliary.LTCP.attributes.PutOnlyMode=true
+#jcs.auxiliary.LTCP.attributes.UdpDiscoveryAddr=224.5.6.8
+#jcs.auxiliary.LTCP.attributes.UdpDiscoveryPort=6780
+#jcs.auxiliary.LTCP.attributes.UdpDiscoveryEnabled=true
+#jcs.auxiliary.LTCP.cacheeventlogger=org.apache.commons.jcs.engine.logging.CacheEventLoggerDebugLogger
+#jcs.auxiliary.LTCP.cacheeventlogger.attributes.logCategoryName=test.RCCEventLogCategory

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AppName>
+
+  <!-- codehause metrics config -->
+  <Metrics>
+    <ConsoleReporter>
+      <Enabled>true</Enabled>
+      <IntervalInSeconds>1</IntervalInSeconds>
+    </ConsoleReporter>
+
+    <GraphiteReporter>
+      <Host>localhost</Host>
+      <Port>7011</Port>
+      <IntervalInSeconds>5</IntervalInSeconds>
+    </GraphiteReporter>
+  </Metrics>
+
+
+  <!-- the java caching system - this is the persistence -->
+  <JavaCachinSystem>
+  
+    <!-- Remote Auxiliary Cache Client referenced by RFailover -->
+    <RFailover>
+    </RFailover>
+  </JavaCachinSystem>
+
+
+
+
+</AppName>
