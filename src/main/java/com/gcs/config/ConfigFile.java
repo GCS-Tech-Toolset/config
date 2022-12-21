@@ -74,7 +74,6 @@ public class ConfigFile
         {
             _configFile = determineConfigFile();
             Parameters params = new Parameters();
-            _logger.debug("config file: {}", _configFile);
             FileBasedConfigurationBuilder<XMLConfiguration> builder = new FileBasedConfigurationBuilder<XMLConfiguration>(XMLConfiguration.class).configure(params.xml()
                     .setEncoding("UTF-8")
                     .setThrowExceptionOnMissing(ConfigFile._FAIL_ON_MISSING_VAL)
@@ -148,6 +147,7 @@ public class ConfigFile
 
         final String defXml = getDefaultXmlFileName();
         cfgFilePath = Paths.get(".", defXml);
+        _logger.debug("looking for cfg file, path:{}", cfgFilePath.toString());
         if (Files.exists(cfgFilePath))
         {
             return cfgFilePath;
@@ -155,6 +155,7 @@ public class ConfigFile
 
 
         cfgFilePath = Paths.get("./etc", defXml);
+        _logger.debug("looking for cfg file, path:{}", cfgFilePath.toString());
         if (Files.exists(cfgFilePath))
         {
             return cfgFilePath;
@@ -163,10 +164,21 @@ public class ConfigFile
 
 
         cfgFilePath = Paths.get("/etc", defXml);
+        _logger.debug("looking for cfg file, path:{}", cfgFilePath.toString());
         if (Files.exists(cfgFilePath))
         {
             return cfgFilePath;
         }
+
+
+        cfgFilePath = Paths.get("/opt/app/etc", defXml);
+        _logger.debug("looking for cfg file, path:{}", cfgFilePath.toString());
+        if (Files.exists(cfgFilePath))
+        {
+            return cfgFilePath;
+        }
+
+
 
 
         URL fileFromJar = ConfigFile.class.getResource("/" + defXml);
