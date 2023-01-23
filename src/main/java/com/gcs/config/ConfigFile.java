@@ -19,8 +19,9 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 
 
@@ -54,6 +55,7 @@ public class ConfigFile
 
     @Getter private static String _appPropsSysName;
     @Getter private static String _defaultXmlFileName;
+
 
 
 
@@ -91,6 +93,29 @@ public class ConfigFile
         catch (Exception ex_)
         {
             _logger.error(ex_.toString());
+            throw new ConfigurationException(ex_);
+        }
+    }
+
+
+
+
+
+    public <T extends IProps> T loadPropertiesFromConfig(Class<T> clazz_) throws ConfigurationException
+    {
+        try
+        {
+            if (_config == null)
+            {
+                throw new ConfigurationException("configuration not yet loaded or is invalid");
+            }
+
+            T cfg = clazz_.newInstance();
+            cfg.loadFromXml(_config);
+            return cfg;
+        }
+        catch (Exception ex_)
+        {
             throw new ConfigurationException(ex_);
         }
     }

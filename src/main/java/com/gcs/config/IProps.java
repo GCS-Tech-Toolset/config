@@ -14,7 +14,16 @@ package com.gcs.config;
 
 
 
-import java.util.HashMap;
+import java.util.Map;
+
+
+
+import org.apache.commons.configuration2.XMLConfiguration;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+
+
+
+import lombok.NonNull;
 
 
 
@@ -22,7 +31,12 @@ import java.util.HashMap;
 
 public interface IProps
 {
+    public void loadFromXml(@NonNull final XMLConfiguration cfg_) throws ConfigurationException;
 
-    public HashMap<String, String> toHashMap();
+
+
+
+
+    public Map<String, String> toMap();
 
 }
