@@ -6,8 +6,8 @@ Helps read XML and configure props
 
 ```java
 ConfigFile cfgF = new ConfigFile("APP_CFG", "appname.xml");
-T1 props = cfgF.loadPropertiesFromConfig(T1.class);
+ConcretePropps props = cfgF.loadPropertiesFromConfig(T1.class);
 ```
 
-  * T1 must implement `IProps`
+  * `ConcretePropps` must implement `IProps`
   
