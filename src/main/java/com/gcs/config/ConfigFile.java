@@ -82,7 +82,6 @@ public class ConfigFile
                     .setListDelimiterHandler(new DefaultListDelimiterHandler(';'))
                     .setValidating(ConfigFile._VALIDATING)
                     .setFileName(_configFile.toString()));
-
             _config = builder.getConfiguration();
 
             if (_logger.isDebugEnabled())
