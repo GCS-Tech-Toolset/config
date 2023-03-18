@@ -45,183 +45,188 @@ public class ConfigFile
 {
 
 
-    @Getter @Setter private static boolean _FAIL_ON_MISSING_VAL = false;
-    @Getter @Setter private static boolean _VALIDATING          = false;
+	@Getter @Setter private static boolean	_FAIL_ON_MISSING_VAL	= false;
+	@Getter @Setter private static boolean	_VALIDATING				= false;
 
-    @Getter @Setter private static Path _configFile;
+	@Getter @Setter private static Path _configFile;
 
-    @Getter private static String _appPropsSysName;
-    @Getter private static String _defaultXmlFileName;
-
-
-
-
-    //
-    // this is the actual target 
-    //
-    @Getter private XMLConfiguration _config;
+	@Getter private static String	_appPropsSysName;
+	@Getter private static String	_defaultXmlFileName;
 
 
 
 
-
-    public ConfigFile(@NonNull final String appPropsSysName_, @NonNull final String defFileName_) throws ConfigurationException
-    {
-        _appPropsSysName = appPropsSysName_;
-        _defaultXmlFileName = defFileName_;
-        try
-        {
-            _configFile = determineConfigFile();
-            Parameters params = new Parameters();
-            FileBasedConfigurationBuilder<XMLConfiguration> builder = new FileBasedConfigurationBuilder<XMLConfiguration>(XMLConfiguration.class).configure(params.xml()
-                    .setEncoding("UTF-8")
-                    .setThrowExceptionOnMissing(ConfigFile._FAIL_ON_MISSING_VAL)
-                    .setListDelimiterHandler(new DefaultListDelimiterHandler(';'))
-                    .setValidating(ConfigFile._VALIDATING)
-                    .setFileName(_configFile.toString()));
-            _config = builder.getConfiguration();
-
-            if (_logger.isDebugEnabled())
-            {
-                _logger.debug("loaded config:{}", _configFile.toString());
-            }
-        }
-        catch (Exception ex_)
-        {
-            _logger.error(ex_.toString());
-            throw new ConfigurationException(ex_);
-        }
-    }
+	//
+	// this is the actual target 
+	//
+	@Getter private XMLConfiguration _config;
 
 
 
 
 
-    public <T extends IProps> T loadPropertiesFromConfig(Class<T> clazz_) throws ConfigurationException
-    {
-        try
-        {
-            if (_config == null)
-            {
-                throw new ConfigurationException("configuration not yet loaded or is invalid");
-            }
+	public ConfigFile(@NonNull final String appPropsSysName_, @NonNull final String defFileName_) throws ConfigurationException
+	{
+		_appPropsSysName = appPropsSysName_;
+		_defaultXmlFileName = defFileName_;
+		try
+		{
+			_configFile = determineConfigFile();
+			if (_logger.isTraceEnabled())
+			{
+				_logger.trace("building config with:{}", _configFile.toString());
+			}
 
-            T cfg = clazz_.newInstance();
-            cfg.loadFromXml(_config);
-            return cfg;
-        }
-        catch (Exception ex_)
-        {
-            throw new ConfigurationException(ex_);
-        }
-    }
+			Parameters params = new Parameters();
+			FileBasedConfigurationBuilder<XMLConfiguration> builder = new FileBasedConfigurationBuilder<XMLConfiguration>(XMLConfiguration.class).configure(params.xml()
+					.setEncoding("UTF-8")
+					.setThrowExceptionOnMissing(ConfigFile._FAIL_ON_MISSING_VAL)
+					.setListDelimiterHandler(new DefaultListDelimiterHandler(';'))
+					.setValidating(ConfigFile._VALIDATING)
+					.setFileName(_configFile.toString()));
+			_config = builder.getConfiguration();
 
-
-
-
-
-    /**
-     * inspects several levels of assumptions and returns the calculated config
-     * file.
-     * 
-     * @throws FileNotFoundException
-     *             if the config file is specified but not present
-     */
-    protected static Path determineConfigFile() throws FileNotFoundException
-    {
-        //
-        // either this was called before (I can't change dynamically)
-        // or this was set statically
-        //
-        if (_configFile != null)
-        {
-            if (_logger.isTraceEnabled())
-            {
-                _logger.trace("config file present:{}", _configFile);
-            }
-            return _configFile;
-        }
-
-
-        //
-        // needs to be determined
-        //
-        Path cfgFilePath;
-        String cfgOverride = System.getProperty(getAppPropsSysName());
-        if (!StringUtils.isEmpty(cfgOverride))
-        {
-            cfgFilePath = Paths.get(cfgOverride);
-            if (Files.exists(cfgFilePath))
-            {
-                return cfgFilePath;
-            }
-            else
-            {
-                //
-                // if someone actually specified the file, and its not found
-                // then I should not continue
-                //
-                throw new FileNotFoundException(getAppPropsSysName() + " specified, but file not found:" + cfgOverride);
-            }
-        }
-
-
-        final String defXml = getDefaultXmlFileName();
-        cfgFilePath = Paths.get(".", defXml);
-        _logger.debug("looking for cfg file, path:{}", cfgFilePath.toString());
-        if (Files.exists(cfgFilePath))
-        {
-            return cfgFilePath;
-        }
-
-
-        cfgFilePath = Paths.get("./etc", defXml);
-        _logger.debug("looking for cfg file, path:{}", cfgFilePath.toString());
-        if (Files.exists(cfgFilePath))
-        {
-            return cfgFilePath;
-        }
-
-
-
-        cfgFilePath = Paths.get("/etc", defXml);
-        _logger.debug("looking for cfg file, path:{}", cfgFilePath.toString());
-        if (Files.exists(cfgFilePath))
-        {
-            return cfgFilePath;
-        }
-
-
-        cfgFilePath = Paths.get("/opt/app/etc", defXml);
-        _logger.debug("looking for cfg file, path:{}", cfgFilePath.toString());
-        if (Files.exists(cfgFilePath))
-        {
-            return cfgFilePath;
-        }
+			if (_logger.isDebugEnabled())
+			{
+				_logger.debug("loaded config:{}", _configFile.toString());
+			}
+		}
+		catch (Exception ex_)
+		{
+			_logger.error(ex_.toString());
+			throw new ConfigurationException(ex_);
+		}
+	}
 
 
 
 
-        URL fileFromJar = ConfigFile.class.getResource("/" + defXml);
-        if (fileFromJar != null)
-        {
-            try
-            {
-                cfgFilePath = Paths.get(fileFromJar.toURI());
-                if (Files.exists(cfgFilePath))
-                {
-                    return cfgFilePath;
-                }
-            }
-            catch (URISyntaxException ex_)
-            {
-                throw new FileNotFoundException(ex_.toString());
-            }
 
-        }
+	public <T extends IProps> T loadPropertiesFromConfig(Class<T> clazz_) throws ConfigurationException
+	{
+		try
+		{
+			if (_config == null)
+			{
+				throw new ConfigurationException("configuration not yet loaded or is invalid");
+			}
 
-        throw new FileNotFoundException("unable to locate config file");
-    }
+			T cfg = clazz_.newInstance();
+			cfg.loadFromXml(_config);
+			return cfg;
+		}
+		catch (Exception ex_)
+		{
+			throw new ConfigurationException(ex_);
+		}
+	}
+
+
+
+
+
+	/**
+	 * inspects several levels of assumptions and returns the calculated config
+	 * file.
+	 * 
+	 * @throws FileNotFoundException
+	 *             if the config file is specified but not present
+	 */
+	protected static Path determineConfigFile() throws FileNotFoundException
+	{
+		//
+		// either this was called before (I can't change dynamically)
+		// or this was set statically
+		//
+		if (_configFile != null)
+		{
+			if (_logger.isTraceEnabled())
+			{
+				_logger.trace("config file present:{}", _configFile);
+			}
+			return _configFile;
+		}
+
+
+		//
+		// needs to be determined
+		//
+		Path cfgFilePath;
+		String cfgOverride = System.getProperty(getAppPropsSysName());
+		if (!StringUtils.isEmpty(cfgOverride))
+		{
+			cfgFilePath = Paths.get(cfgOverride);
+			if (Files.exists(cfgFilePath))
+			{
+				return cfgFilePath;
+			}
+			else
+			{
+				//
+				// if someone actually specified the file, and its not found
+				// then I should not continue
+				//
+				throw new FileNotFoundException(getAppPropsSysName() + " specified, but file not found:" + cfgOverride);
+			}
+		}
+
+
+		final String defXml = getDefaultXmlFileName();
+		cfgFilePath = Paths.get(".", defXml);
+		_logger.debug("looking for cfg file, path:{}", cfgFilePath.toString());
+		if (Files.exists(cfgFilePath))
+		{
+			return cfgFilePath;
+		}
+
+
+		cfgFilePath = Paths.get("./etc", defXml);
+		_logger.debug("looking for cfg file, path:{}", cfgFilePath.toString());
+		if (Files.exists(cfgFilePath))
+		{
+			return cfgFilePath;
+		}
+
+
+
+		cfgFilePath = Paths.get("/etc", defXml);
+		_logger.debug("looking for cfg file, path:{}", cfgFilePath.toString());
+		if (Files.exists(cfgFilePath))
+		{
+			return cfgFilePath;
+		}
+
+
+		cfgFilePath = Paths.get("/opt/app/etc", defXml);
+		_logger.debug("looking for cfg file, path:{}", cfgFilePath.toString());
+		if (Files.exists(cfgFilePath))
+		{
+			return cfgFilePath;
+		}
+
+
+
+
+		URL fileFromJar = ConfigFile.class.getResource("/" + defXml);
+		if (fileFromJar != null)
+		{
+			try
+			{
+				cfgFilePath = Paths.get(fileFromJar.toURI());
+				if (Files.exists(cfgFilePath))
+				{
+					return cfgFilePath;
+				}
+			}
+			catch (URISyntaxException ex_)
+			{
+				throw new FileNotFoundException(ex_.toString());
+			}
+
+		}
+
+		throw new FileNotFoundException("unable to locate config file");
+	}
 
 
 
