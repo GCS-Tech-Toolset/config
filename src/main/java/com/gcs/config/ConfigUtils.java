@@ -92,6 +92,35 @@ public class ConfigUtils
 
 
 
+    public static final void logToInfo(Object obj_)
+    {
+        String name;
+        for (Field f : getAllFields(obj_.getClass()))
+        {
+            try
+            {
+                f.setAccessible(true);
+                if (f.getName().startsWith("_"))
+                {
+                    name = StringUtils.substring(f.getName(), 1);
+                    _logger.info("{}::{}={}", obj_.getClass().getSimpleName(), name, f.get(obj_));
+                }
+            }
+            catch (IllegalArgumentException ex_)
+            {
+                _logger.error(ex_.toString(), ex_);
+            }
+            catch (IllegalAccessException ex_)
+            {
+                _logger.error(ex_.toString(), ex_);
+            }
+        }
+    }
+
+
+
+
+
     public static Collection<Field> getAllFields(Class<?> type_)
     {
         TreeSet<Field> fields = new TreeSet<Field>(new Comparator<Field>()
