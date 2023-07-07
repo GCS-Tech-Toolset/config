@@ -44,9 +44,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.gcs</groupId>
-            <artifactId>logging.colorconsole</artifactId>
-            <version>1.10.0</version>
+            <groupId>gcs.toolset</groupId>
+            <artifactId>colorconsole</artifactId>
+            <version>1.10</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
