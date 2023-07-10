@@ -3,9 +3,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <servers>
     <server>
-      <username>${env.JFROG_USERNAME}</username>
-      <password>${env.JFROG_PASSWORD}</password>
-      <id>${env.JFROG_SERVER_ID}</id>
+      <username>${env.GH_SERVER_USERNAME}</username>
+      <password>${env.GH_SERVER_PASSWORD}</password>
+      <id>${env.id}</id>
     </server>
   </servers>
 </settings>
