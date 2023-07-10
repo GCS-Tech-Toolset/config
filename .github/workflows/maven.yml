@@ -55,5 +55,8 @@ jobs:
           cache: maven
 
       - name: Deploy with Maven
-        with: '[{"id": "github", "username": "$${{ secrets.GH_SERVER_USERNAME }}", "password": "$${{ secrets.GH_SERVER_PASSWORD }} }]'
         run: mvn -B deploy -Dmaven.test.skip=true -Dmaven.install.skip=true --file pom.xml -s ./src/main/assembly/maven-settings.xml
+        env:
+          id: "github"
+          username: "$${{ secrets.GH_SERVER_USERNAME }}"
+          password: "$${{ secrets.GH_SERVER_PASSWORD }} }]'
