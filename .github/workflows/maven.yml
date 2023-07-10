@@ -57,6 +57,6 @@ jobs:
       - name: Deploy with Maven
         run: mvn -B deploy -Dmaven.test.skip=true -Dmaven.install.skip=true --file pom.xml -s ./src/main/assembly/maven-settings.xml
         env:
-          id: "github"
-          username: "$${{ secrets.GH_SERVER_USERNAME }}"
-          password: "$${{ secrets.GH_SERVER_PASSWORD }} }]'
+          SERVER_ID: github
+          GH_SERVER_USERNAME: $${{ secrets.GH_SERVER_USERNAME }}
+          GH_SERVER_PASSWORD: $${{ secrets.GH_SERVER_PASSWORD }}

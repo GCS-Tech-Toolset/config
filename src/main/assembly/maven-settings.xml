@@ -5,7 +5,7 @@
     <server>
       <username>${env.GH_SERVER_USERNAME}</username>
       <password>${env.GH_SERVER_PASSWORD}</password>
-      <id>${env.id}</id>
+      <id>${env.SERVER_ID}</id>
     </server>
   </servers>
 </settings>
